@@ -4,8 +4,8 @@ const { User } = require('../models');
 
 const { SECRET } = process.env;
 
-const createToken = (name, email) => {
-  const token = jwt.sign({ user: { name, email } }, SECRET);
+const createToken = (name, email, id) => {
+  const token = jwt.sign({ user: { name, email, id } }, SECRET);
   return token;
 };
 
@@ -17,15 +17,37 @@ const hashPassword = async (password) => {
   return hashedPassword;
 };
 
+const decryptPassword = async (password, userPassword) => {
+  const decryptedPassword = await bcrypt.compare(password, userPassword);
+  return decryptedPassword;
+};
+
 const create = async (name, email, password) => {
   const hashedPassword = await hashPassword(password);
-  await User.create({ name, email, password: hashedPassword });
+  const { id } = await User.create({ name, email, password: hashedPassword });
 
-  const token = createToken(name, email);
+  const token = createToken(name, email, id);
+  return token;
+};
+
+const login = async (email, password) => {
+  const defaultError = { error: 'Usuário ou senha incorretos' };
+  const user = await verifyIfEmailExists(email);
+
+  if (!user) return defaultError;
+
+  const { password: userPassword, name, id } = user;
+  const validPassword = await decryptPassword(password, userPassword);
+
+  if (!validPassword) return defaultError;
+
+  const token = createToken(name, email, id);
+
   return token;
 };
 
 module.exports = {
   create,
   verifyIfEmailExists,
+  login,
 };

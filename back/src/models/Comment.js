@@ -3,6 +3,8 @@ module.exports = (sequelize, DataTypes) => {
     'Comment',
     {
       comment: DataTypes.STRING,
+      userId: { type: DataTypes.INTEGER, foreignKey: true },
+      postId: { type: DataTypes.INTEGER, foreignKey: true },
     },
     { timestamps: true },
   );

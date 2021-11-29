@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       content: DataTypes.STRING,
       image: DataTypes.STRING,
+      userId: { type: DataTypes.INTEGER, foreignKey: true },
     },
     { timestamps: true },
   );

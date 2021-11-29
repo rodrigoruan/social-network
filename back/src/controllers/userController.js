@@ -6,11 +6,27 @@ const create = async (req, res) => {
     const response = await userService.create(name, email, password);
 
     res.status(200).json({ token: response });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const response = await userService.login(email, password);
+
+    if (response.error) {
+      return res.status(400).json({ error: response.error });
+    }
+
+    res.status(200).json({ token: response });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
 
 module.exports = {
   create,
+  login,
 };
