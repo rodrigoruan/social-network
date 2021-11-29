@@ -35,8 +35,19 @@ const update = async (req, res) => {
   }
 };
 
+const deletePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await postService.deletePost(id);
+    res.status(202).json();
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getAll,
   create,
   update,
+  deletePost,
 };

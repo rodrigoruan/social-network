@@ -12,9 +12,12 @@ const update = async (content, image, id) => {
   return post;
 };
 
+const deletePost = async (id) => Post.destroy({ where: { id } });
+
 module.exports = {
   getAll,
   create,
   findById,
   update,
+  deletePost,
 };

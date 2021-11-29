@@ -18,10 +18,14 @@ const verifyIfUserCreatePost = async (req, res, next) => {
 
   const post = await findById(postId);
 
+  if (!post) {
+    return res.status(404).json({ message: 'Post não existe' });
+  }
+
   const userIsCreator = post.userId === userId;
 
   if (!userIsCreator) {
-    return res.status(404).json({ message: 'Usuário não autorizado' });
+    return res.status(403).json({ message: 'Usuário não autorizado' });
   }
 
   next();

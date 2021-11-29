@@ -1,6 +1,11 @@
 const router = require('express').Router();
 
-const { getAll, create, update } = require('../controllers/postController');
+const {
+  getAll,
+  create,
+  update,
+  deletePost,
+} = require('../controllers/postController');
 const validateToken = require('../middlewares/validateToken');
 const {
   validatePost,
@@ -16,5 +21,6 @@ router.put(
   validatePost,
   update,
 );
+router.delete('/delete/:id', validateToken, verifyIfUserCreatePost, deletePost);
 
 module.exports = router;
